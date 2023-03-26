@@ -1,0 +1,27 @@
+name: Auth UI CI/CD
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+      - name: Install and Build 🔧
+        run: |
+          npm install
+          npm run-script build
+      - name: Deploy with gh-pages
+        run: |
+          git config --global user.name "github-actions-bot"
+          git config --global user.email "<support+actions@github.com>"
+          git clone https://sanjairocky:${{secrets.TOKEN}}@github.com/sanjairocky/${{secrets.TARGET_REPOSITORY}}
+          rm -rf ${{secrets.TARGET_REPOSITORY}}/auth
+          cp -R dist/ ${{secrets.TARGET_REPOSITORY}}/auth
+          cd ${{secrets.TARGET_REPOSITORY}}
+          git add .
+          git commit -m "Deployed new auth version"
+          git push
