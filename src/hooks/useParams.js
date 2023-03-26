@@ -9,7 +9,8 @@ const useParams = () => {
   ].map((a) => [a, params.get(a)]);
   return {
     ...Object.fromEntries(data),
-    is_valid: data.some(([_, a]) => !!a),
+    is_valid: !!params.get("logout") || data.every(([_, a]) => !!a),
+    logout: params.get("logout") === "true",
   };
 };
 
