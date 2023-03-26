@@ -5,16 +5,45 @@ import useParams from "./hooks/useParams";
 import Loader from "./components/Loader";
 
 const loginUri =
-  "http://localhost:8080/?response_type=id_token&client_id=29352910282374239857&redirect_uri=https%3A%2F%2Fsanjairocky.github.io%2FmStore&scope=create+delete&state=xcoiv98y3md22vwsuye3kch";
+  window.location.href +
+  "?response_type=id_token&client_id=29352910282374239857&redirect_uri=https%3A%2F%2Fsanjairocky.github.io%2FmStore&scope=create+delete&state=xcoiv98y3md22vwsuye3kch";
 
-const logoutUri = "http://localhost:8080/?logout=true";
+const logoutUri = window.location.href + "?logout=true";
 
 const App = () => {
-  const [_, setdata] = useApp();
-  const { response_type, redirect_uri, state, is_valid, logout } = useParams();
+  const [data, setdata] = useApp();
+  const { response_type, redirect_uri, state, is_valid, logout, client_id } =
+    useParams();
   const [loading, setLoading] = useState();
   const unameRef = useRef();
   const passRef = useRef();
+
+  if (data?.id_token)
+    return (
+      <div
+        className="d-flex flex-column p-4 border shadow"
+        style={{ minWidth: "80%", minHeight: "50%" }}
+      >
+        <h4 className="d-flex align-items-center justify-content-center p-3 fs-1 fw-lighter">
+          Applications
+        </h4>
+        <ul>
+          {data.apps.map(({ client_id, redirect }) => (
+            <li
+              key={client_id}
+              className="p-3 border m-2"
+              onClick={() => (window.location.href = redirect)}
+            >
+              {client_id}
+            </li>
+          ))}
+        </ul>
+        <span className="py-2"></span>
+        <button onClick={() => (window.location.href = logoutUri)}>
+          Logout
+        </button>
+      </div>
+    );
 
   if (is_valid && logout) return <div>Logged out successfully</div>;
 
@@ -33,6 +62,9 @@ const App = () => {
           <li>scope: read</li>
           <li>state: myState</li>
         </ul>
+        <a href={loginUri} target="_blank">
+          click here
+        </a>
       </div>
     );
 
@@ -62,7 +94,15 @@ const App = () => {
 
     setdata({
       id_token,
-      redirect: `${redirect_uri}?id_token=${id_token}&state=${state}`,
+      username,
+      iat,
+      eat,
+      apps: [
+        {
+          client_id,
+          redirect: `${redirect_uri}?id_token=${id_token}&state=${state}`,
+        },
+      ],
     });
     // console.log(window.atob(id_token.split(".")[1]));
   };
