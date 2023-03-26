@@ -8,8 +8,9 @@ const loginUri =
   "http://localhost:8080/?response_type=id_token&client_id=29352910282374239857&redirect_uri=https%3A%2F%2Fsanjairocky.github.io%2FmStore&scope=create+delete&state=xcoiv98y3md22vwsuye3kch";
 
 const logoutUri = "http://localhost:8080/?logout=true";
+
 const App = () => {
-  const [data, setdata] = useApp();
+  const [_, setdata] = useApp();
   const { response_type, redirect_uri, state, is_valid, logout } = useParams();
   const [loading, setLoading] = useState();
   const unameRef = useRef();
