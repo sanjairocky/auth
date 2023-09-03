@@ -13,7 +13,7 @@ module.exports = {
   devServer: {},
   output: {
     filename: "js/[name].bundle.js",
-    path: path.resolve(__dirname, "dist"), // base path where to send compiled assets
+    path: path.resolve(__dirname, "docs"), // base path where to send compiled assets
     publicPath: "", // base path where referenced files will be look for
     pathinfo: false,
   },
